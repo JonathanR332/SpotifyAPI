@@ -174,3 +174,6 @@ inform = f"Popularity By Millions Chart:"
 fig = px.line(df.head(20), x="Artist", y=popularity_selected, title=inform)
 
 st.plotly_chart(fig, use_container_width=True) #creates a line graph based on the data of most streamed songs
+
+
+#streamlit run C:\Users\....\....\...\Test.py
