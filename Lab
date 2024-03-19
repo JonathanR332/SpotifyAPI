@@ -1,0 +1,103 @@
+import streamlit as st
+from PIL import Image
+
+#header
+st.markdown("<h1 style='text-align: center; color: white;'>Resume Builder</h1>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; color: white;'>Create a professional resume in just minutes!", unsafe_allow_html=True)
+
+#whitespace
+st.text(" ")
+st.text(" ")
+st.text(" ")
+
+#image
+
+title_image = Image.open("media/resume.jpeg")
+st.image(title_image)
+
+#change background color
+page_color = f"""
+<style>
+[data-testid="stAppViewContainer"] > .main {{
+background-color: #3d5a80;}}
+[data-testid="stSidebar"] > div:first-child {{
+background-color: #3d5a80;}}
+[data-testid="stHeader"] {{
+background: rgba(0,0,0,0);
+}}
+</style>
+"""
+st.markdown(page_color,unsafe_allow_html=True)
+
+
+# user input for basic info
+st.subheader("Let's start with the basics")
+st.text(" ")
+name = st.text_input("Full name")
+email = st.text_input("Email address")
+phone = st.text_input("Phone number")
+
+# user input for education
+st.header("Education")
+degree = st.text_input("Degree and major")
+university = st.text_input("University")
+grad_year = st.text_input("Graduation year")
+
+# user input for work experience
+st.header("Work Experience")
+with st.form("Work experience"):
+    company = st.text_input("Company")
+    position = st.text_input("Position")
+    start_date = st.date_input("Start date")
+    end_date = st.date_input("End date")
+    job_description = st.text_area("Job description")
+    st.form_submit_button(label="Add experience")
+
+# user input section for certifications and awards
+st.header("Certifications and Awards")
+with st.form("Certifications and awards"):
+    title = st.text_input("Title")
+    issuer = st.text_input("Issuer")
+    date_earned = st.date_input("Date earned")
+    st.form_submit_button(label="Add certification or award")
+
+# user input section for skills
+st.header("Skills")
+skills = st.text_area("Enter your skills, separated by commas")
+
+
+#whitespace
+st.text(" ")
+st.text(" ")
+st.text(" ")
+
+
+# give a brief summary of user input
+
+st.subheader("Here's a brief summary of your information.")
+st.write("If information is correct, you can download your PDF!")
+st.write(f"Name: {name}")
+st.write(f"Email: {email}")
+st.write(f"Phone: {phone}")
+st.write(f"Degree: {degree}")
+st.write(f"University: {university}")
+st.write(f"Graduation year: {grad_year}")
+st.write(f"Work experience:")
+for i in range(len(company)):
+    st.write(f"- {position[i]} at {company[i]} ({start_date[i]} to {end_date[i]})")
+    st.write(f"  {job_description[i]}")
+st.write(f"Certifications and awards:")
+for i in range(len(title)):
+    st.write(f"- {title[i]} from {issuer[i]} ({date_earned[i]})")
+st.write(f"Skills: {skills}")
+
+
+#whitespace
+st.text(" ")
+st.text(" ")
+st.text(" ")
+
+
+# Button to download resume as PDF
+st.button("Download PDF")
+
