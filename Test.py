@@ -8,7 +8,7 @@ import plotly.express as px
 
 
 
-# Set up Streamlit app title and heading
+#Setting the up Streamlit app title and heading
 st.set_page_config(page_title='Spotify Artist Information', page_icon=':musical_note:')
 st.title('Spotify Info Tool') #title can be changed later
 st.header('Spotify Artist Information')
@@ -16,17 +16,17 @@ current_time = datetime.datetime.now()
 st.write(f"Getting Current Data based on: {current_time}")
 
 
-# Set up Spotify API parameters
-SPOTIFY_CLIENT_ID = '240acb518fed48a9aaf493ca9bfcee11'
+
+SPOTIFY_CLIENT_ID = '240acb518fed48a9aaf493ca9bfcee11' #Api Parameters
 SPOTIFY_CLIENT_SECRET = '5becdbdc35544bc0822d668d5c9fca66'
 AUTH_URL = 'https://accounts.spotify.com/api/token'
 SEARCH_URL = 'https://api.spotify.com/v1/search'
 
-# Set up Streamlit input for artist search term
-search_term = st.text_input('Search for an artist:', '')
 
-# Get Spotify API access token
-def get_access_token(client_id, client_secret, auth_url):
+search_term = st.text_input('Search for an artist:', '') # artist search term
+
+
+def get_access_token(client_id, client_secret, auth_url): #Get Spotify API access token
     auth_str = client_id + ':' + client_secret
     b64_auth_str = base64.b64encode(auth_str.encode()).decode()
     headers = {'Authorization': 'Basic ' + b64_auth_str}
@@ -34,8 +34,8 @@ def get_access_token(client_id, client_secret, auth_url):
     response = requests.post(auth_url, headers=headers, data=payload)
     access_token = response.json()['access_token']
     return access_token
-#color in theme
-page_color = f"""
+
+page_color = f""" 
 <style>
  [data-testid="stAppViewContainer"] > .main {{
  background-color: #1DB954;}}
@@ -46,11 +46,12 @@ page_color = f"""
  }}
  </style>
 """
+# green for spotify :)
 st.markdown(page_color,unsafe_allow_html=True)
 
-# Search for artist and display results
-if st.button('Search'):
-    if not search_term:
+
+if st.button('Search'): 
+    if not search_term: #Search function
         st.warning('Please enter an artist name to search.')
     else:
         access_token = get_access_token(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, AUTH_URL)
@@ -70,7 +71,7 @@ if st.button('Search'):
                     if result['images']:
                         st.image(result['images'][0]['url'], width=200)
                     if 'canadian hip hop' in result['genres']:
-                        df = pd.DataFrame({'lat': [56.1304], 'lon': [-106.3468]})
+                        df = pd.DataFrame({'lat': [56.1304], 'lon': [-106.3468]}) #display maps to show users where the artist genre / is located from
                         st.map(df)
                     if 'canadian pop' in result['genres']:
                         df = pd.DataFrame({'lat': [56.1304], 'lon': [-106.3468]})
@@ -89,8 +90,8 @@ if st.button('Search'):
         else:
             st.error('Error occurred while fetching data. Please try again later.')
 
-# checkbox for chart updates subscription
-agree = st.checkbox('Subscribe for daily chart updates?')
+
+agree = st.checkbox('Subscribe for daily chart updates?') #checkbox function
 if agree:
         st.write("We've got you covered!")
         with st.form("Email Form"):
@@ -98,12 +99,13 @@ if agree:
             email = st.text_input(label ='Email Address', placeholder="Please enter your email address")
             submit_res = st.form_submit_button(label="Send")
 
-# Add radio buttons for Artist, Album, and Track
-st.sidebar.title("Radio")
+
+st.sidebar.title("Radio") #radio buttons allowing users to search for either Artist, Album, or Track
 options = ['Artist', 'Album', 'Track']
 selected_option = st.sidebar.radio('Select an option to listen to:', options)
 st.sidebar.write("You selected:", selected_option)
 
+#spacers so users can breathe and have a certain amount of results
 st.text(" ")
 st.text(" ")
 st.text(" ")
@@ -127,8 +129,8 @@ st.text(" ")
 
 st.header("Top Charts in History")
 
-# Loading the dataset
-df = pd.read_csv("media/spotify_top_music.csv")
+#loading the csv file
+df = pd.read_csv("spotify_top_music.csv")
 df = df[['title', 'artist', 'top genre', 'year', 'pop']]
 df
 
@@ -145,7 +147,7 @@ st.text(" ")
 st.text(" ")
 st.text(" ")
 
-st.text("Data Taken from 2018")
+st.text("Data Taken from 2018") #used what data i could find 
 data = {
     'Artist': [
         'Ed Sheeran', 'Camilla Cabello', 'Post Malone', 'Eminem', 'Maroon5',
@@ -171,4 +173,4 @@ inform = f"Popularity By Millions Chart:"
 
 fig = px.line(df.head(20), x="Artist", y=popularity_selected, title=inform)
 
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, use_container_width=True) #creates a line graph based on the data of most streamed songs
